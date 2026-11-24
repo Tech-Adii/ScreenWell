@@ -12,9 +12,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: macos-15
+          - runner: macos-26
             arch: arm64
-          - runner: macos-15-intel
+          - runner: macos-26-intel
             arch: x64
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 25
@@ -35,7 +35,7 @@ jobs:
           image="ScreenWell-${version}-mac-${SCREENWELL_MAC_ARCH}.dmg"
           mkdir -p release/mac-installers
           cd release/mac-installers
-          gh release download "v${version}-mac" --pattern "$image" --pattern 'MAC-SHA256SUMS.txt'
+          gh release download "v${version}-mac-r2" --pattern "$image" --pattern 'MAC-SHA256SUMS.txt'
           grep -F "  $image" MAC-SHA256SUMS.txt > image.sha256
           shasum -a 256 --check image.sha256
       - name: Build, install, and test the Mac package
@@ -88,4 +88,4 @@ jobs:
           done
           cd release/installers
           cat ScreenWell-mac-installer-*/release/mac-installers/MAC-PKG-*.sha256 > MAC-INSTALLER-SHA256SUMS.txt
-          gh release upload "v${version}-mac" ScreenWell-mac-installer-*/release/mac-installers/ScreenWell-*-mac-*.pkg MAC-INSTALLER-SHA256SUMS.txt
+          gh release upload "v${version}-mac-r2" ScreenWell-mac-installer-*/release/mac-installers/ScreenWell-*-mac-*.pkg MAC-INSTALLER-SHA256SUMS.txt

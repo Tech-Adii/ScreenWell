@@ -14,9 +14,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: macos-15
+          - runner: macos-26
             arch: arm64
-          - runner: macos-15-intel
+          - runner: macos-26-intel
             arch: x64
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 40
@@ -32,7 +32,7 @@ jobs:
       - run: npm run lint
       - run: npm run build
       - name: Build local preview packages
-        run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --config.mac.identity=- --publish never
+        run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --config.mac.identity=- --config.mac.hardenedRuntime=false --publish never
       - run: node scripts/verify-mac.mjs ${{ matrix.arch }}
       - name: Launch the app from the disk image
         env:
@@ -47,6 +47,11 @@ jobs:
           staged=release/mac
           if [[ "$SCREENWELL_MAC_ARCH" == arm64 ]]; then staged=release/mac-arm64; fi
           codesign --verify --deep --strict "$app"
+          signature="$(codesign -dv "$app" 2>&1)"
+          if [[ "$signature" == *'(runtime)'* ]]; then
+            echo 'An ad-hoc preview must not enforce Hardened Runtime library validation.' >&2
+            exit 1
+          fi
           cmp "$app/Contents/Resources/app.asar" "$staged/ScreenWell.app/Contents/Resources/app.asar"
           node scripts/mac-smoke.mjs "$SCREENWELL_MAC_ARCH" "$app"
       - uses: actions/upload-artifact@v4
@@ -88,14 +93,14 @@ jobs:
           done > MAC-SHA256SUMS.txt
           test "$(wc -l < MAC-SHA256SUMS.txt)" -eq 2
           sha256sum --check MAC-SHA256SUMS.txt
-          gh release create "v${version}-mac" "ScreenWell-${version}-mac-arm64.dmg" "ScreenWell-${version}-mac-x64.dmg" MAC-SHA256SUMS.txt \
+          gh release create "v${version}-mac-r2" "ScreenWell-${version}-mac-arm64.dmg" "ScreenWell-${version}-mac-x64.dmg" MAC-SHA256SUMS.txt \
             --repo "$GITHUB_REPOSITORY" --target "$SCREENWELL_SOURCE" --prerelease \
-            --title "ScreenWell ${version} for macOS" --notes-file - << 'NOTES'
+            --title "ScreenWell ${version} for macOS — launch fix" --notes-file - << 'NOTES'
           Download the **arm64** DMG for an Apple Silicon Mac (M-series), or the **x64** DMG for an Intel Mac. Open the disk image and drag ScreenWell to Applications.
 
           These are ad-hoc signed previews. Apple has not notarized them, so Gatekeeper may block the download on some Macs, including managed devices.
 
-          Both disk images were checked on macOS 15 and the app launched on each target architecture. The launch test covered an offline study session and confirmed that the camera starts off. Physical webcam and spoken audio playback remain hands-on checks.
+          This preview fixes the macOS launch crash caused by the Electron framework's signing Team ID. Both disk images passed offline launch and study checks on macOS 26.
 
           [Mac installation guide](https://github.com/Tech-Adii/ScreenWell/blob/main/MAC-README.md)
           NOTES

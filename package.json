@@ -25,7 +25,7 @@
     "dist:portable": "npm run build && electron-builder --win portable --x64",
     "dist:linux": "npm run build && electron-builder --linux AppImage deb --x64 --publish never",
     "dist:mac": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --publish never",
-    "dist:mac:preview": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --config.mac.identity=- --publish never"
+    "dist:mac:preview": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --config.mac.identity=- --config.mac.hardenedRuntime=false --publish never"
   },
   "dependencies": {
     "@fontsource/nunito-sans": "^5.3.0",
