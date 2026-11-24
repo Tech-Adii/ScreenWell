@@ -1,0 +1,73 @@
+name: Build and test Linux packages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run assets
+      - run: npm test
+      - run: npm run lint
+      - name: Install display and audio libraries for testing
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb xauth dbus-x11 openbox libgtk-3-0t64 libasound2t64
+      - run: npm run dist:linux
+      - name: Verify the installed Debian package and AppImage
+        shell: bash
+        run: |
+          sudo apt-get install -y ./release/ScreenWell-*-linux-*.deb
+          test "$(dpkg-query -W -f='${Architecture}' screenwell)" = amd64
+          test -f /usr/share/applications/screenwell.desktop
+          node scripts/verify-package.mjs /opt/ScreenWell/resources/app.asar release/LINUX-PACKAGE-VALIDATION.json
+          mkdir -p "$RUNNER_TEMP/screenwell-appimage"
+          appimage=("$PWD"/release/ScreenWell-*-linux-*.AppImage)
+          (cd "$RUNNER_TEMP/screenwell-appimage" && "${appimage[0]}" --appimage-extract >/dev/null)
+          image="$RUNNER_TEMP/screenwell-appimage/squashfs-root"
+          cmp "$image/resources/app.asar" /opt/ScreenWell/resources/app.asar
+          export SCREENWELL_APPIMAGE_TEST_ROOT="$image"
+          xvfb-run -a -s '-screen 0 1440x1000x24' dbus-run-session -- bash -e -c '
+            openbox > /tmp/screenwell-openbox.log 2>&1 &
+            node scripts/smoke.mjs /opt/ScreenWell/screenwell
+            cp test-results/packaged-smoke.json release/LINUX-DEB-SMOKE.json
+            node scripts/smoke.mjs "$SCREENWELL_APPIMAGE_TEST_ROOT/AppRun"
+            cp test-results/packaged-smoke.json release/LINUX-APPIMAGE-SMOKE.json
+          '
+          sudo apt-get remove -y screenwell
+          test ! -e /opt/ScreenWell/screenwell
+          (cd release && sha256sum ScreenWell-*-linux-*.deb ScreenWell-*-linux-*.AppImage > LINUX-SHA256SUMS.txt)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScreenWell-linux-x64
+          if-no-files-found: error
+          compression-level: 0
+          path: |
+            release/ScreenWell-*-linux-*.deb
+            release/ScreenWell-*-linux-*.AppImage
+            release/LINUX-*.json
+            release/LINUX-SHA256SUMS.txt
+      - name: Verify background camera with a synthetic feed
+        env:
+          SCREENWELL_E2E_EXECUTABLE: /opt/ScreenWell/screenwell
+        run: |
+          sudo apt-get install -y ./release/ScreenWell-*-linux-*.deb
+          xvfb-run -a -s '-screen 0 1440x1000x24' dbus-run-session -- bash -e -c '
+            openbox > /tmp/screenwell-openbox.log 2>&1 &
+            npx playwright test tests/ui/background.spec.ts -g "selected study checks continue"
+          '

@@ -70,14 +70,16 @@ export default function Settings({
         </section>
         <section className="card">
           <h2>Around your work</h2>
-          <Toggle
-            label={
-              window.screenwell.platform === 'darwin' ? 'Start at login' : 'Start with Windows'
-            }
-            description="Available in installed builds."
-            checked={s.startAtLogin}
-            onChange={(v) => update('startAtLogin', v)}
-          />
+          {window.screenwell.platform !== 'linux' && (
+            <Toggle
+              label={
+                window.screenwell.platform === 'win32' ? 'Start with Windows' : 'Start at login'
+              }
+              description="Available in installed builds."
+              checked={s.startAtLogin}
+              onChange={(v) => update('startAtLogin', v)}
+            />
+          )}
           <Toggle
             label="Gentle reminder sound"
             checked={s.sound}

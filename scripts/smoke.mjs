@@ -24,14 +24,22 @@ try {
   await page.getByRole('button', { name: 'Make room for a pause' }).click();
   await page.getByRole('heading', { name: /Packaged check/ }).waitFor();
   const snapshot = await page.evaluate(() => window.screenwell.snapshot());
+  if (process.platform === 'linux') {
+    expect(await page.evaluate(() => window.screenwell.platform)).toBe('linux');
+  }
   if (snapshot.privacy.dataPath !== path.join(data, 'screenwell.sqlite'))
     throw new Error('Packaged smoke did not open its isolated test profile');
   if (!snapshot.privacy.modelReady || snapshot.privacy.cameraOn)
     throw new Error('Packaged local assets/camera default check failed');
   await page.getByRole('button', { name: 'Start session', exact: true }).click();
   const mainWindow = await app.browserWindow(page);
-  if (process.platform === 'win32') {
+  if (process.platform === 'win32' || process.platform === 'linux') {
     await expect.poll(() => mainWindow.evaluate((win) => win.getTitle())).toMatch(/Eye break in/);
+  }
+  if (process.platform === 'linux') {
+    await page.getByRole('button', { name: 'Check Linux status', exact: true }).click();
+    const current = await page.evaluate(() => window.screenwell.snapshot());
+    expect(current.notificationDelivery.message).toMatch(/Linux notifications are managed/);
   }
   await page.getByRole('button', { name: 'End session', exact: true }).click();
   await page.getByRole('button', { name: 'Hydration', exact: true }).click();

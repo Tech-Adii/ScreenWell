@@ -13,9 +13,15 @@ async function launch() {
     store = new Store(path.join(dir, 'screenwell.sqlite'));
   store.set('settings', { ...defaults, onboarded: true, name: 'Sky', quietEnabled: false });
   store.close();
+  const packagedExecutable = process.env.SCREENWELL_E2E_EXECUTABLE;
+  // The Linux package check runs under Xvfb, which has no physical GPU.
+  const graphicsArgs =
+    packagedExecutable && process.platform === 'linux'
+      ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']
+      : [];
   const app = await electron.launch({
-      executablePath: require('electron') as string,
-      args: ['.', '--test'],
+      executablePath: packagedExecutable ?? (require('electron') as string),
+      args: packagedExecutable ? ['--test', ...graphicsArgs] : ['.', '--test'],
       env: { ...process.env, SCREENWELL_DATA_DIR: dir },
     }),
     page = await app.firstWindow();

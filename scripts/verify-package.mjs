@@ -35,7 +35,10 @@ const result = {
   noExternalNodeModules: true,
   packagedUiVerified: false,
 };
-await writeFile('release/PACKAGE-VALIDATION.json', JSON.stringify(result, null, 2) + '\n');
+await writeFile(
+  process.argv[3] ?? 'release/PACKAGE-VALIDATION.json',
+  JSON.stringify(result, null, 2) + '\n',
+);
 console.log(
   `Verified ${dist.length} compiled runtime files, four models, version ${manifest.version}, and no external node_modules.`,
 );

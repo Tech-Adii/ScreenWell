@@ -64,6 +64,9 @@ app.commandLine.appendSwitch(
 );
 app.commandLine.appendSwitch('no-proxy-server');
 if (process.platform === 'win32') app.setAppUserModelId('in.screenwell.desktop');
+if (process.platform === 'linux') app.commandLine.appendSwitch('enable-speech-dispatcher');
+const osName =
+  process.platform === 'darwin' ? 'macOS' : process.platform === 'linux' ? 'Linux' : 'Windows';
 const testing = process.argv.includes('--test');
 if (testing && process.env.SCREENWELL_DATA_DIR)
   app.setPath('userData', path.resolve(process.env.SCREENWELL_DATA_DIR));
@@ -93,7 +96,7 @@ let publishedDay = dayKey();
 const root = path.resolve(__dirname, '../renderer');
 const iconPath = path.join(root, 'icon.png');
 const desktopDelivery = new DesktopDelivery({
-  osName: process.platform === 'darwin' ? 'macOS' : 'Windows',
+  osName,
   supported: () => Notification.isSupported(),
   readSetting: readWindowsNotificationSetting,
   create: (title, body) => new Notification({ title, body, icon: iconPath, silent: true }),
@@ -336,7 +339,12 @@ async function syncPopup() {
   popup.showInactive();
 }
 function updateLogin(enabled: boolean) {
-  if (!testing && app.isPackaged && !state.demo)
+  if (
+    !testing &&
+    app.isPackaged &&
+    !state.demo &&
+    (process.platform === 'win32' || process.platform === 'darwin')
+  )
     app.setLoginItemSettings({
       openAtLogin: enabled,
       path: process.env.PORTABLE_EXECUTABLE_FILE ?? process.execPath,
@@ -440,7 +448,8 @@ async function boot() {
     },
   });
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-  if (process.platform === 'win32') win.on('page-title-updated', (event) => event.preventDefault());
+  if (process.platform === 'win32' || process.platform === 'linux')
+    win.on('page-title-updated', (event) => event.preventDefault());
   watchWindowActivity(win);
   nativeTheme.on('updated', syncNativeAppearance);
   win.webContents.on('will-navigate', (e, url) => {
@@ -449,6 +458,10 @@ async function boot() {
   win.on('close', (e) => {
     if (!quitting && !testing) {
       e.preventDefault();
+      if (process.platform === 'linux') {
+        app.quit();
+        return;
+      }
       win.hide();
       stopCamera();
       persist();
@@ -543,7 +556,9 @@ async function boot() {
           ? 'Windows notifications enabled. ScreenWell desktop popups are ready.'
           : process.platform === 'darwin'
             ? 'macOS notification permission is managed in System Settings. ScreenWell desktop popups are ready.'
-            : 'Windows status could not be verified. ScreenWell desktop popups are ready.',
+            : process.platform === 'linux'
+              ? 'Linux notifications are managed by your desktop. ScreenWell desktop popups are available.'
+              : 'Windows status could not be verified. ScreenWell desktop popups are ready.',
     };
     return emit();
   });
@@ -1279,7 +1294,7 @@ app.on('before-quit', () => {
   }
 });
 app.on('window-all-closed', () => {
-  if (testing) app.quit();
+  if (testing || process.platform === 'linux') app.quit();
 });
 if (gotLock)
   app

@@ -2,6 +2,8 @@
   "name": "screenwell",
   "version": "1.14.0",
   "description": "Private, offline study and screen wellness companion",
+  "homepage": "https://github.com/Tech-Adii/ScreenWell",
+  "desktopName": "screenwell.desktop",
   "author": "ScreenWell · CS238DL",
   "license": "MIT",
   "private": true,
@@ -21,6 +23,7 @@
     "dist:setup:signed": "node scripts/build-setup.mjs --check-signing && npm run dist:dir && node scripts/verify-package.mjs && node scripts/build-setup.mjs --signed && node scripts/verify-setup.mjs --signed",
     "dist:dir": "npm run build && electron-builder --win --dir --x64",
     "dist:portable": "npm run build && electron-builder --win portable --x64",
+    "dist:linux": "npm run build && electron-builder --linux AppImage deb --x64 --publish never",
     "dist:mac": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --publish never",
     "dist:mac:preview": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --config.mac.identity=- --publish never"
   },
@@ -71,6 +74,23 @@
     ],
     "asar": true,
     "npmRebuild": false,
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "executableName": "screenwell",
+      "syncDesktopName": true,
+      "icon": "assets/public/icon.png",
+      "artifactName": "ScreenWell-${version}-linux-${arch}.${ext}"
+    },
+    "deb": {
+      "maintainer": "ScreenWell <136696678+Tech-Adii@users.noreply.github.com>"
+    },
+    "appImage": {
+      "artifactName": "ScreenWell-${version}-linux-x64.${ext}"
+    },
     "mac": {
       "category": "public.app-category.healthcare-fitness",
       "icon": "assets/icon.icns",

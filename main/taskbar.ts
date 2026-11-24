@@ -62,7 +62,7 @@ export function createTaskbarCountdown(window: BrowserWindow, tray: Tray) {
     const nextTitle = detail ? `ScreenWell · ${detail}` : 'ScreenWell';
     if (refresh || title !== nextTitle) {
       tray.setToolTip(nextTitle);
-      if (process.platform === 'win32') window.setTitle(nextTitle);
+      if (process.platform === 'win32' || process.platform === 'linux') window.setTitle(nextTitle);
       title = nextTitle;
     }
     if (process.platform !== 'win32') return;

@@ -115,7 +115,8 @@ export function BackgroundStatus({ data }: { data: Snapshot }) {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState('');
   const blocked = data.notificationDelivery?.native === 'blocked';
-  const os = window.screenwell.platform === 'darwin' ? 'macOS' : 'Windows';
+  const linux = window.screenwell.platform === 'linux';
+  const os = linux ? 'Linux' : window.screenwell.platform === 'darwin' ? 'macOS' : 'Windows';
   return (
     <section className="background-status card">
       <div>
@@ -125,8 +126,10 @@ export function BackgroundStatus({ data }: { data: Snapshot }) {
         <div>
           <strong>Keep studying. ScreenWell stays with you.</strong>
           <p>
-            Minimize this window to keep your session and selected camera checks running. Reminders
-            appear above normal desktop apps without taking focus.
+            Minimize this window to keep your session and selected camera checks running.{' '}
+            {linux
+              ? 'Your desktop controls how reminders and popups appear.'
+              : 'Reminders appear above normal desktop apps without taking focus.'}
           </p>
         </div>
       </div>
@@ -159,7 +162,10 @@ export function BackgroundStatus({ data }: { data: Snapshot }) {
       </div>
       {error && <p role="status">{error}</p>}
       <small>
-        Pause or end the session to stop tracking. Closing the window to the tray stops the camera.
+        Pause or end the session to stop tracking.{' '}
+        {linux
+          ? 'Closing the window quits ScreenWell.'
+          : 'Closing the window to the tray stops the camera.'}
       </small>
     </section>
   );

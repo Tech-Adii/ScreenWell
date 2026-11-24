@@ -278,7 +278,7 @@ export type PlanAction =
   | { type: 'goal'; minutes: number };
 export type ReminderAction = 'now' | 'snooze5' | 'snooze10' | 'snooze15' | 'skip' | 'off';
 export interface ScreenWellAPI {
-  platform: 'darwin' | 'win32' | 'other';
+  platform: 'darwin' | 'win32' | 'linux' | 'other';
   snapshot(): Promise<Snapshot>;
   checkNotifications(): Promise<Snapshot>;
   speak(text: string | null): Promise<void>;

@@ -1,5 +1,12 @@
 # Validation record
 
+## Linux 1.14.0 preview — 24 November 2026
+
+- Ubuntu 24.04 x64 passed the production build, offline asset check, lint, and all 118 unit tests.
+- The `.deb` installed and uninstalled on Ubuntu. Its desktop entry and 25 packaged application files, including four offline camera models, matched the build. The extracted AppImage contained the same app archive.
+- Both packages launched, finished onboarding offline, ran a study session, logged water, exported a PDF, and displayed light and dark dashboards at a compact window size with 130% text.
+- With the installed `.deb` and a synthetic feed, camera inference continued while minimized and stopped when the session paused. The virtual desktop used software graphics for this test. Hands-on webcam testing, other Linux desktops, and the AppImage's mounted launch remain open. [Successful Ubuntu run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45415738046)
+
 ## Windows 1.14.0 — 24 November 2026
 
 - Type checking, the offline asset scan, lint and all 118 unit tests passed. All 22 Electron desktop scenarios passed together on the final build. An earlier run timed out while dismissing a popup and capturing a screenshot. Both scenarios passed in the final full run.

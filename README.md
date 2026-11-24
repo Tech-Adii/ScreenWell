@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 <img src="assets/public/icon.png" width="128" height="128" alt="ScreenWell Logo" />
 
@@ -6,17 +6,18 @@
 
 ### **Rest your eyes. Reset your posture. Reclaim your focus.**
 
-*An ultra-private, 100% offline desktop companion engineered for healthy digital study and work habits.*  
+*An offline desktop companion for study sessions, screen breaks, hydration, and posture awareness.*
+
 *Created for the **Applied Design Thinking Lab (CS238DL)** · Supporting **UN SDG 3: Good Health and Well-Being**.*
 
 [![Release](https://img.shields.io/badge/Release-v1.14.0-38bdf8?style=flat-square&logo=github)](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20x64%20%7C%20macOS-blue?style=flat-square&logo=windows)](https://github.com/Tech-Adii/ScreenWell/releases)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20x64%20%7C%20Linux%20x64-blue?style=flat-square)](#-quick-start--installation)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero%20Telemetry-10b981?style=flat-square)](#-radical-privacy--offline-first-architecture)
 [![License](https://img.shields.io/badge/License-MIT-amber?style=flat-square)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-118%20Unit%20%7C%2022%20Desktop%20Pass-8b5cf6?style=flat-square)](VALIDATION.md)
+[![Tests](https://img.shields.io/badge/Tests-Windows%20%7C%20Ubuntu-8b5cf6?style=flat-square)](VALIDATION.md)
 [![MediaPipe](https://img.shields.io/badge/AI-On--Device%20MediaPipe%20WASM-ff6f00?style=flat-square)](#-smart-on-device-vision-engine)
 
-[🚀 Download ScreenWell 1.14.0 Setup](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [✨ Key Features](#-core-capabilities) • [🏗️ Architecture](#-system-architecture) • [📖 Quick Start](#-quick-start--installation) • [🔬 Validation Suite](VALIDATION.md)
+[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux) • [macOS build guide](MAC-README.md) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
 
 </div>
 
@@ -24,18 +25,9 @@
 
 ## 🌟 Executive Summary
 
-In today's academic and high-output technical environments, students and knowledge workers spend 4 to 10+ uninterrupted hours in front of screens. The resulting toll—**Computer Vision Syndrome (CVS), postural kyphosis ("tech neck"), chronic dehydration, and cognitive fatigue**—severely impacts health and learning efficiency.
+ScreenWell helps students and other desktop users plan work around eye rests, movement, and water breaks. Choose a study profile or set your own timings. The camera is optional and can provide on-device estimates of blinks, posture, and relative screen distance.
 
-Existing reminder and productivity utilities often demand online accounts, harvest invasive telemetry, rely on brittle cloud backends, or lock user screens with aggressive popups that disrupt critical exams and deadlines.
-
-**ScreenWell** is built differently. It is an **offline-first, zero-telemetry, non-punitive desktop companion** that combines:
-1. **On-Device Computer Vision (MediaPipe WASM)**: Runs local blink-rate (EAR), 3D neck/shoulder skeletal posture tracking, and relative screen proximity estimation entirely in volatile RAM.
-2. **Deterministic Focus & Study Scheduler**: Features guided study blocks (Quick Review, Balanced Study, Practice Exam), live Windows taskbar badge countdowns, and non-blocking `showInactive()` desktop nudges.
-3. **Ergonomic Coaching & Guided Routines**: Provides 6-step animated eye routines (20-20-20 rule), 16 illustrated desk stretches (Mayo Clinic aligned), and offline voice coaching using native OS voices.
-4. **Radical Privacy by Design**: Zero accounts, zero server dependencies, zero telemetry, and an isolated "Mentor Demo Mode" for safe demonstration and grading.
-
-> [!IMPORTANT]
-> **Health & Medical Scope:** ScreenWell is a calibrated ergonomic habit companion designed to prompt mindful comfort breaks; it is **not a clinical diagnostic tool or medical device**. Posture and blink thresholds are transparent personal heuristics.
+Reminders can be snoozed, skipped, or paused. Your study history stays on your device, and **Mentor Demo Mode** uses separate sample data for classroom presentations. The camera readings support habit awareness. Their accuracy depends on the camera, lighting, and calibration. [Wellness guidance and scope](WELLNESS-GUIDANCE.md)
 
 ---
 
@@ -52,7 +44,7 @@ ScreenWell was developed following the rigorous **Design Thinking Framework** (E
 | **73.6%** demand **snooze & pause controls** | Absolute user autonomy (no locked screens) | Topmost `showInactive()` popups with snooze, skip, and off-for-today actions |
 | **39.6%** prefer non-modal desktop popups | Subtitle-style desktop notifications | Independent floating desktop reminder card alongside native WinRT toast alerts |
 | **45.1%** want **hydration tracking** | Frictionless habit reinforcement | Animated water glass logger, customizable daily goal, active hours, and streaks |
-| **38.5%** seek **guided desk stretches** | Actionable physical resets | 16 illustrated upper-body & wrist stretches with seated accessibility options |
+| **38.5%** seek **guided desk stretches** | Actionable physical resets | Illustrated movement guides with seated options |
 | **39.6%** express **privacy reluctance with webcams** | Privacy-first architecture | **100% Offline**: camera off by default; explicit session consent; RAM-only processing |
 | **30.8%** request **progress summaries** | Guilt-free reflection & reporting | Local habit score formula, daily/weekly charts, and deterministic PDF/CSV exports |
 
@@ -61,9 +53,9 @@ ScreenWell was developed following the rigorous **Design Thinking Framework** (E
 ## ✨ Core Capabilities
 
 ### 👁️ Smart On-Device Vision Engine
-ScreenWell leverages Google’s **MediaPipe Tasks Vision** bundled locally as WASM runtimes and offline models—executing strictly within dedicated Web Workers:
-* **Blink Rate Monitoring (EAR)**: Computes Eye Aspect Ratio with temporal smoothing and gap-rejection algorithms to accurately track blink frequency without false positives from squinting.
-* **3D Posture & Spine Alignment**: Tracks shoulder slope, neck length, and head tilt angles using MediaPipe Pose Landmarker (selectable **Lite**, **Full**, or **Heavy** models operating at 5–8 FPS to preserve battery life).
+ScreenWell runs bundled **MediaPipe Tasks Vision** models in a local Web Worker.
+* **Blink rate monitoring** estimates blinks from changes in Eye Aspect Ratio. Smoothing and tracking-gap checks reduce false counts.
+* **Posture awareness** uses estimated shoulder slope, neck position, and head tilt. Choose **Lite**, **Full**, or **Heavy** pose tracking at a model-dependent 5–8 FPS.
 * **Relative Proximity Warnings**: Detects prolonged forward-head slouching (triggers after 10 continuous seconds at 125% calibrated face-scale) with a 60-second recovery cooldown.
 * **Transparent Signal Confidence**: Computes an honest real-time confidence rating derived from lighting conditions, head angle, and landmark visibility. If the user steps away or lighting degrades, it gracefully displays status without guessing.
 
@@ -82,31 +74,30 @@ ScreenWell leverages Google’s **MediaPipe Tasks Vision** bundled locally as WA
 ```
 
 ### ⏱️ Guided Study Sessions & Deep Focus Planner
-* **Pre-Configured Study Profiles**: Choose from **Quick Review** (short study bursts), **Balanced Study** (classic Pomodoro cadence), or **Practice Exam** (extended focus blocks). Save up to 8 custom profiles.
-* **Taskbar Countdown & Notification Tooltip**: On Windows, minimizing the application updates the taskbar icon with a live countdown badge and progress bar, keeping you informed at a glance.
+* **Study profiles** include **Quick Review**, **Balanced Study** with 20-minute blocks and 30-second eye rests, and **Practice Exam** with longer blocks. Save up to eight custom profiles.
+* **Background countdown** shows remaining time in the Linux window title. Windows adds a taskbar badge and progress bar. Minimize ScreenWell to keep the session and selected camera checks running.
 * **Automatic Absence & Step-Away Logging**: If camera monitoring is active and you leave your desk, ScreenWell tracks the sustained absence and prompts you upon return: *"Count as break"* or *"Dismiss"*.
-* **Important Task Mode**: Silence all notifications and timers instantly during presentations, live coding sessions, or examinations.
+* **Important Task mode** pauses scheduled wellness reminders during a dedicated focus period.
 
 ### 🧘 Interactive Guided Exercises & Voice Coaching
 * **6-Step Animated Eye Rest**: Guides you through distance gaze, soft blinking, closed-eye resting, gentle palming, near/far focus shifts, and figure-eight tracking.
-* **16 Illustrated Desk Stretches**: Targeted physical routines for neck, shoulders, chest, forearms, and wrists based on Mayo Clinic desk ergonomics.
-* **Offline Voice Guidance**: Optional soothing voice narration powered solely by local, installed Windows/OS speech synthesizers. No remote voice APIs, no microphones, no internet required.
+* **Illustrated stretches** guide gentle movement for the neck, shoulders, arms, wrists, and more.
+* **Offline voice guidance** uses an available local English system voice. Linux uses Speech Dispatcher. Written instructions remain available on all platforms.
 
 ### 💧 Hydration Companion & Daily Productivity
 * **Hydration Tracker**: Set custom daily fluid goals and active hours. Log glasses with a single click and maintain healthy hydration streaks.
 * **Daily Top 5 Priorities**: Organize today’s most critical objectives and set an explicit daily focus goal that persists across app restarts.
 * **1–2 Minute Breathing Reset**: Take an on-demand mental reset with an animated expanding/contracting breathing circle, complete with reduced-motion support.
-* **Command Palette (`Ctrl + K`)**: Instantly search pages, trigger quick actions, or toggle focus timers with keyboard-driven speed.
+* **Command palette** opens with `Ctrl + K` on Windows and Linux or `Command + K` on macOS. Search for pages and quick actions.
 
 ### 🎨 Appearance Studio & Universal Accessibility
-* **9 Curated Color Palettes**: Pick between Forest, Ocean, Amber, Midnight, Plum, Slate, and more—or customize your own primary and companion colors with automated contrast validation.
-* **Motion Intensity Levels**: Toggle between **Still**, **Gentle**, or **Expressive** motion styles. ScreenWell strictly honors Windows and OS `prefers-reduced-motion` settings.
-* **High-Contrast & Large Fonts**: Fully readable at up to 130% zoom in both light and dark modes with comprehensive ARIA labels and focus trapping.
+* **Nine palettes** include Cobalt, Aurora, Lagoon, and Forest. Choose light, dark, or system mode and customize the primary and companion colors.
+* **Motion settings** include **Still**, **Gentle**, and **Expressive**. The app follows the system's reduced-motion preference.
+* **Accessibility controls** include larger text, high contrast, keyboard navigation, and screen-reader labels.
 
 ### 📊 Local Analytics, Export & Mentor Demo
-* **Transparent Habit Score**: Calculated objectively without proprietary black boxes:
-  $$\text{Habit Score} = \text{Breaks Completed}(40\%) + \text{Hydration Target}(30\%) + \text{Observed Posture}(20\%) + \text{Blink Rhythm}(10\%)$$
-* **Deterministic Client-Side PDF & CSV Export**: Generate clean, professional audit reports using embedded `@pdf-lib` and local fonts—guaranteeing formula injection safety in exported CSVs.
+* **Habit score** uses weights of 40 for completed breaks, 30 for hydration, 20 for observed posture, and 10 for observed blinks. When camera readings are absent, the app rescales the available weights.
+* **Local PDF and CSV reports** show your progress and activity history. CSV export handles text that could otherwise be interpreted as a spreadsheet formula.
 * **Mentor Demo Mode**: Switch to an isolated, in-memory synthetic dataset with pre-seeded study sessions, hydration logs, and posture check-ins for classroom presentations and evaluations without touching personal records.
 
 ---
@@ -132,7 +123,7 @@ flowchart TD
         subgraph Core ["Electron Main Process (Node 24 LTS)"]
             Scheduler["Deterministic Habit Scheduler"]
             TrayModule["System Tray & Taskbar Badging"]
-            WinToast["WinRT Native Notifications & Popups"]
+            Alerts["Desktop notifications & popups"]
             ProtocolHandler["Local screenwell://app Protocol"]
         end
 
@@ -141,7 +132,7 @@ flowchart TD
             RAMAnalysis["In-Memory Frame Analysis"]
         end
 
-        subgraph Storage ["Local User Data (AppData)"]
+        subgraph Storage ["Local user data"]
             SQLite[("node:sqlite Database<br/>(WAL Mode)")]
         end
     end
@@ -155,7 +146,7 @@ flowchart TD
 
     UI <==> |"Strict CSP / Local Assets"| SecureBridge
     SecureBridge <==> Core
-    Core <==> Worker
+    UI <==> Worker
     Core <==> Storage
     UI -.-x BlockedCloud
     Core -.-x BlockedCloud
@@ -165,7 +156,7 @@ flowchart TD
 1. **Zero External Network Connections**: Content Security Policy (CSP) forbids external scripts, styles, fonts, and network endpoints. The application is served strictly via the local `screenwell://app` protocol.
 2. **Volatile Frame Processing**: Camera video feeds are transferred directly to worker memory, processed for landmark coordinates, and immediately dereferenced. **No frames, images, or audio are ever written to disk or transmitted.**
 3. **Opt-In Camera Permissions**: The camera is strictly **OFF** on initial startup and every subsequent launch. Camera use is decoupled from study sessions and can be revoked at any moment with a single click.
-4. **Built-In SQLite Storage**: Leverages Node's native `node:sqlite` within Electron 45, avoiding external binary compilation issues and keeping user logs localized to `%APPDATA%\ScreenWell\screenwell.sqlite`.
+4. **Built-in SQLite storage** keeps study history and preferences in the current user's app data folder. Open **Privacy & purpose → Where your data lives** to find the exact path.
 
 ---
 
@@ -173,7 +164,7 @@ flowchart TD
 
 ```text
 ScreenWell/
-├── main/               # Electron lifecycle, window management, system tray, WinRT notifications, IPC
+├── main/               # Electron lifecycle, window management, system tray, notifications, IPC
 ├── renderer/           # React 19 UI, Lucide icons, Recharts, exercise animations, Appearance Studio
 ├── engine/             # Pure deterministic scheduler for breaks, hydration, stretches, and quiet hours
 ├── vision/             # Pure MediaPipe vision workers, EAR calculations, 3D posture heuristics
@@ -182,8 +173,8 @@ ScreenWell/
 ├── assets/             # Bundled MediaPipe models, WASM binaries, Nunito Sans fonts, app icons, chimes
 ├── scripts/            # Asset prepackagers, licenses auditor, offline verification, and setup builders
 ├── tests/              # Vitest unit test suite (118 tests) & Playwright desktop UI scenarios (22 tests)
-├── release/            # NSIS installer scripts, portable builds, and verification hashes
-├── DECISIONS.md        # 23 architectural decision records (ADRs) with rationale
+├── release/            # Generated packages and verification records after a local build
+├── DECISIONS.md        # Engineering decisions and rationale
 ├── PRIVACY.md          # Comprehensive data storage and memory lifecycle disclosures
 ├── TRACEABILITY.md     # Full mapping of N=91 survey findings to implemented code
 ├── VALIDATION.md       # Empirical testing records, test coverage, and release checks
@@ -194,38 +185,41 @@ ScreenWell/
 
 ## 🚀 Quick Start & Installation
 
-### Option 1: Windows x64 Installer (Recommended)
-1. Download **[ScreenWell 1.14.0 Setup](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0)** (`ScreenWell-1.14.0-Setup.exe`).
+### Windows x64
+1. Download `ScreenWell-1.14.0-Setup.exe`. [Windows release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0)
 2. Run the installer. It installs locally for your Windows user profile without requiring administrator privileges.
-3. Launch ScreenWell from your desktop shortcut or Start Menu.
+3. Launch ScreenWell from your desktop shortcut or Start menu. If upgrading, quit the older copy from its tray menu before starting Setup.
 
-> [!NOTE]
-> **Windows Smart App Control Notice:** Because this is an academic open-source build without a paid EV certificate from Microsoft's Trusted Root Program, Windows Defender or Smart App Control may display an unrecognized publisher prompt. You can review the exact SHA-256 integrity hash in [VALIDATION.md](VALIDATION.md) and verify the source code.
+The setup is unsigned. Windows Smart App Control can block it on protected PCs. [Package checksum](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0/SHA256SUMS.txt)
 
-### Option 2: Portable Executable
-Prefer not to install? Download `ScreenWell-1.14.0-Portable.exe` from the [Releases](https://github.com/Tech-Adii/ScreenWell/releases) page and run it directly from any folder or USB drive.
+### Linux x64 preview
 
-### Option 3: macOS (Apple Silicon & Intel)
-ScreenWell source code contains full macOS support (DMG and ZIP packaging targets). To build on macOS:
+Pick the `.deb` for Ubuntu or Debian, or the AppImage for another compatible desktop. The Linux preview targets 64-bit Intel and AMD processors and was tested on Ubuntu 24.04. [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux)
+
+- **Ubuntu or Debian**. Open a terminal in the download folder and run `sudo apt install ./ScreenWell-1.14.0-linux-amd64.deb`. Open **ScreenWell** from the applications menu.
+- **AppImage**. In the file's properties, allow it to run as a program, then open it. [Linux install guide](LINUX-README.md)
+
+Minimize ScreenWell to keep tracking and reminders running. On Linux, closing the window quits the app and saves your active study session for later. Tray and popup behavior varies by desktop.
+
+### macOS build preview (Apple Silicon and Intel)
+Build the DMG and ZIP from source on a Mac with the command below. These are local previews. [macOS build guide](MAC-README.md)
 ```bash
 git clone https://github.com/Tech-Adii/ScreenWell.git
 cd ScreenWell
 chmod +x Build-on-Mac.command
 ./Build-on-Mac.command
 ```
-*(Or refer to [MAC-README.md](MAC-README.md) for step-by-step Apple Silicon/Intel build details).*
-
 ---
 
 ## 🛠️ Developer Guide & Toolchain
 
 ### Prerequisites
-* **Operating System**: Windows 10/11 x64 or macOS (12+)
+* **Build host**: Use Windows for the Windows setup, Linux for the Linux packages, or a Mac for macOS packaging.
 * **Runtime**: [Node.js 24 LTS](https://nodejs.org/) or newer with `npm`
-* **Compilers**: NSIS 3.12+ (for building Windows setup packages) and 7-Zip
+* **Windows tools**: 7-Zip verifies the generated setup. The signed build also requires NSIS 3.12+, SignTool, and signing credentials.
 
 ### Initial Setup & Development
-```powershell
+```bash
 # Clone the repository
 git clone https://github.com/Tech-Adii/ScreenWell.git
 cd ScreenWell
@@ -236,7 +230,7 @@ npm ci
 # Download and verify offline MediaPipe models, WASM runtimes, and local assets
 npm run assets
 
-# Start application in development mode (with hot reloading and type checking)
+# Build and launch the app
 npm run dev
 ```
 
@@ -262,9 +256,11 @@ npm run dist:setup
 # Build portable single-file executable
 npm run dist:portable
 
-# Build all distribution targets
+# Build both Windows targets
 npm run dist
 ```
+
+On Linux, run `npm run dist:linux` to build the `.deb` and AppImage. On a Mac, run `npm run dist:mac:preview` for local preview packages.
 
 To create a signed release with an official Authenticode certificate:
 ```powershell
@@ -278,25 +274,21 @@ npm run dist:setup:signed
 
 ## 🔬 Validation & Reliability Record
 
-Release **v1.14.0** has been systematically audited:
-* ✅ **118 Vitest Unit Tests**: Validates deterministic scheduling, EAR transitions, posture geometry smoothing, streak counters, SQLite schema integrity, CSV formula neutralization, and PDF generation.
-* ✅ **22 Playwright Desktop Scenarios**: Tests onboarding workflows, guided study blocks, taskbar timer integration, offline voice routing, popup dismissals, quiet hours, and memory drop after camera deactivation.
-* ✅ **Zero Remote Leakage**: Automated scanner confirms zero runtime HTTP/HTTPS requests or external CDN dependencies.
-* ✅ **Integrity Verification**: 100% file match between packaged NSIS archive and unpacked runtime binaries.
-
-Full audit logs, SHA-256 checksums, and regression notes are maintained in [VALIDATION.md](VALIDATION.md).
+- **Windows 11 x64** passed 118 unit tests, 22 desktop scenarios, and installer checks for offline launch, upgrade, and uninstall.
+- **Ubuntu 24.04 x64** passed 118 unit tests. The installed Debian package and extracted AppImage passed offline desktop checks. The Debian package also passed a minimized-camera test with synthetic video. [Linux workflow results](https://github.com/Tech-Adii/ScreenWell/actions/runs/45415738046)
+- **Test limits** include physical webcam accuracy, Linux desktop differences, and macOS release readiness. [Validation record](VALIDATION.md)
 
 ---
 
 ## 📚 Project Documentation Hub
 
 Explore the complete engineering and research documentation:
-* 📑 **[DECISIONS.md](DECISIONS.md)**: 23 Architectural Decision Records (ADRs) explaining tech stack, SQLite selection, offline vision heuristics, and non-blocking notification philosophy.
+* 📑 **[DECISIONS.md](DECISIONS.md)**: Engineering decisions behind the technology, local database, vision heuristics, and reminders.
 * 🛡️ **[PRIVACY.md](PRIVACY.md)**: Exhaustive data dictionary, local storage lifecycle, and memory management disclosures.
 * 📈 **[TRACEABILITY.md](TRACEABILITY.md)**: Comprehensive mapping between the $N = 91$ student survey findings and concrete feature implementations.
 * 🩺 **[WELLNESS-GUIDANCE.md](WELLNESS-GUIDANCE.md)**: Clinical scope, American Academy of Ophthalmology (AAO) computer vision references, and Mayo Clinic desk stretch guidelines.
 * 🎭 **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)**: Complete step-by-step walkthrough script for mentors, reviewers, and evaluators.
-* 🍎 **[MAC-README.md](MAC-README.md)**: Dedicated compilation instructions for macOS Monterey, Ventura, Sonoma, and Sequoia.
+* **[LINUX-README.md](LINUX-README.md)** and **[MAC-README.md](MAC-README.md)** cover platform-specific setup and packaging.
 * 📜 **[CHANGELOG.md](CHANGELOG.md)**: Complete release history detailing features from v1.0.0 through v1.14.0.
 
 ---
