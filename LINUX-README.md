@@ -11,6 +11,8 @@ Minimize the app to keep study sessions and selected camera checks running. The 
 
 For optional spoken instructions, your Linux desktop needs Speech Dispatcher and a supported local English voice, such as eSpeak NG. Written instructions work without voice setup.
 
+Camera checks use WebGL. If the graphics driver cannot provide a WebGL context, you can still use the study timer and reminders with the camera off.
+
 ## Build on Linux
 
 Use Node.js 24 and npm on a 64-bit Linux build machine. A build downloads its dependencies and camera models. The installed app runs offline.

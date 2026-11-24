@@ -46,7 +46,6 @@ jobs:
             cp test-results/packaged-smoke.json release/LINUX-DEB-SMOKE.json
             node scripts/smoke.mjs "$SCREENWELL_APPIMAGE_TEST_ROOT/AppRun"
             cp test-results/packaged-smoke.json release/LINUX-APPIMAGE-SMOKE.json
-            SCREENWELL_E2E_EXECUTABLE=/opt/ScreenWell/screenwell npx playwright test tests/ui/background.spec.ts -g "selected study checks continue"
           '
           sudo apt-get remove -y screenwell
           test ! -e /opt/ScreenWell/screenwell
@@ -61,3 +60,12 @@ jobs:
             release/ScreenWell-*-linux-*.AppImage
             release/LINUX-*.json
             release/LINUX-SHA256SUMS.txt
+      - name: Verify background camera with a synthetic feed
+        env:
+          SCREENWELL_E2E_EXECUTABLE: /opt/ScreenWell/screenwell
+        run: |
+          sudo apt-get install -y ./release/ScreenWell-*-linux-*.deb
+          xvfb-run -a -s '-screen 0 1440x1000x24' dbus-run-session -- bash -e -c '
+            openbox > /tmp/screenwell-openbox.log 2>&1 &
+            npx playwright test tests/ui/background.spec.ts -g "selected study checks continue"
+          '
