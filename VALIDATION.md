@@ -1,5 +1,11 @@
 # Validation record
 
+## macOS 1.14.0 preview
+
+- The Apple Silicon and Intel macOS 15 jobs passed the production build, the offline asset check, lint, and all 118 unit tests.
+- Both builds passed the bundle architecture, camera usage description, ad-hoc code signature, and packaged asset checks. The app archive inside each mounted DMG matched the staged bundle.
+- On each architecture, ScreenWell launched from the mounted DMG, reloaded offline, and ran a study session with the camera off and local models available. Physical camera, spoken audio playback, and Gatekeeper acceptance of an internet download remain separate hands-on checks. [macOS verification run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45425551930)
+
 ## Linux 1.14.0 preview — 24 November 2026
 
 - Ubuntu 24.04 x64 passed the production build, offline asset check, lint, and all 118 unit tests.

@@ -11,13 +11,13 @@
 *Created for the **Applied Design Thinking Lab (CS238DL)** · Supporting **UN SDG 3: Good Health and Well-Being**.*
 
 [![Release](https://img.shields.io/badge/Release-v1.14.0-38bdf8?style=flat-square&logo=github)](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20x64%20%7C%20Linux%20x64-blue?style=flat-square)](#-quick-start--installation)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue?style=flat-square)](#-quick-start--installation)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero%20Telemetry-10b981?style=flat-square)](#-radical-privacy--offline-first-architecture)
 [![License](https://img.shields.io/badge/License-MIT-amber?style=flat-square)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-Windows%20%7C%20Ubuntu-8b5cf6?style=flat-square)](VALIDATION.md)
 [![MediaPipe](https://img.shields.io/badge/AI-On--Device%20MediaPipe%20WASM-ff6f00?style=flat-square)](#-smart-on-device-vision-engine)
 
-[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux) • [macOS build guide](MAC-README.md) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
+[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux) • [Mac download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
 
 </div>
 
@@ -201,14 +201,11 @@ Pick the `.deb` for Ubuntu or Debian, or the AppImage for another compatible des
 
 Minimize ScreenWell to keep tracking and reminders running. On Linux, closing the window quits the app and saves your active study session for later. Tray and popup behavior varies by desktop.
 
-### macOS build preview (Apple Silicon and Intel)
-Build the DMG and ZIP from source on a Mac with the command below. These are local previews. [macOS build guide](MAC-README.md)
-```bash
-git clone https://github.com/Tech-Adii/ScreenWell.git
-cd ScreenWell
-chmod +x Build-on-Mac.command
-./Build-on-Mac.command
-```
+### macOS preview (Apple Silicon and Intel)
+
+Open **Apple menu → About This Mac** to check your chip. Pick the `arm64.dmg` for an Apple M-series Mac or the `x64.dmg` for an Intel Mac. Open the disk image and drag **ScreenWell** to **Applications**. [macOS release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac)
+
+Apple has yet to notarize these previews. macOS security settings may block them on some Macs, including managed devices. [Mac guide](MAC-README.md)
 ---
 
 ## 🛠️ Developer Guide & Toolchain
@@ -276,7 +273,8 @@ npm run dist:setup:signed
 
 - **Windows 11 x64** passed 118 unit tests, 22 desktop scenarios, and installer checks for offline launch, upgrade, and uninstall.
 - **Ubuntu 24.04 x64** passed 118 unit tests. The installed Debian package and extracted AppImage passed offline desktop checks. The Debian package also passed a minimized-camera test with synthetic video. [Linux workflow results](https://github.com/Tech-Adii/ScreenWell/actions/runs/45415738046)
-- **Test limits** include physical webcam accuracy, Linux desktop differences, and macOS release readiness. [Validation record](VALIDATION.md)
+- **macOS 15** passed 118 unit tests on both Apple Silicon and Intel. Each app launched from its own disk image and ran a study session offline with the camera off. [macOS verification](https://github.com/Tech-Adii/ScreenWell/actions/runs/45425551930)
+- **Test limits** include physical webcam accuracy, spoken audio on Mac, and differences between Linux desktops. [Validation record](VALIDATION.md)
 
 ---
 

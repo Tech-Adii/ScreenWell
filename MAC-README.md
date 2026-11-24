@@ -1,6 +1,12 @@
-# ScreenWell for MacBook — build handoff
+# ScreenWell for Mac
 
-Use this source tree to build local ScreenWell previews for Apple Silicon (`arm64`, M-series) and Intel (`x64`) MacBooks. The macOS preview still needs to be built and tested on macOS.
+## Install the preview
+
+1. Open **Apple menu → About This Mac** and check **Chip** or **Processor**.
+2. Pick `ScreenWell-1.14.0-mac-arm64.dmg` for an Apple M-series chip or `ScreenWell-1.14.0-mac-x64.dmg` for an Intel processor. [Mac release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac)
+3. Open the `.dmg` and drag **ScreenWell** to **Applications**. Then open it from **Applications**.
+
+GitHub requires access to this private repository. The builds use ad-hoc signatures and may be blocked on computers that require Apple notarization. [Apple Developer ID and notarization](https://developer.apple.com/developer-id/)
 
 ## Build on a Mac
 
@@ -18,7 +24,7 @@ Open the matching DMG and copy ScreenWell to Applications. These are **ad-hoc si
 
 ## Build without owning a Mac
 
-In the ScreenWell repository, open **Actions → Build Mac previews → Run workflow**. Successful jobs provide separate Apple Silicon and Intel artifacts. The workflow uses read-only repository permissions and stores builds as Actions artifacts. GitHub plan usage limits may apply.
+In the ScreenWell repository, open **Actions → Build Mac previews → Run workflow**. Successful jobs provide separate Apple Silicon and Intel artifacts. If you select **publish_preview**, GitHub verifies both disk images and publishes them as a prerelease. GitHub plan usage limits may apply.
 
 ## Mac-specific behavior
 
@@ -28,7 +34,7 @@ The menu bar includes normal Mac application/edit/window menus. The Dock reopens
 
 ## Before presenting to your teacher
 
-On the actual Mac, check camera consent and calibration, score-below-80 alerts, distance alerts, minimized monitoring, exercise popups and offline speech. The automated launch check does not validate a physical camera, spoken audio, other Spaces/fullscreen apps, or accuracy. macOS builds and runtime tests have **not yet run** on this Windows machine.
+Both previews passed signature, architecture, package-content and offline launch checks on macOS 15. On your Mac, test any features you plan to demonstrate that use the physical webcam, spoken audio, or other Spaces and fullscreen apps. [macOS verification run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45425551930)
 
 For public or managed-device distribution, use an Apple Developer ID certificate and Apple notarization credentials with `npm run dist:mac`; signing and notarization must be verified on the resulting artifacts. Keep credentials in your build environment, never in this kit.
 
