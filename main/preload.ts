@@ -3,7 +3,9 @@ import type { ScreenWellAPI, Snapshot } from '../shared/types';
 const invoke = (channel: string, ...args: unknown[]) => ipcRenderer.invoke(channel, ...args);
 const api: ScreenWellAPI = {
   platform:
-    process.platform === 'darwin' ? 'darwin' : process.platform === 'win32' ? 'win32' : 'other',
+    process.platform === 'darwin' || process.platform === 'win32' || process.platform === 'linux'
+      ? process.platform
+      : 'other',
   snapshot: () => invoke('snapshot'),
   speak: (text) => invoke('speak', text),
   onSpeak: (cb) => {

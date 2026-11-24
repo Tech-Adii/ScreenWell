@@ -44,7 +44,7 @@ export class DesktopDelivery {
   private generation = 0;
   constructor(
     private deps: {
-      osName?: 'Windows' | 'macOS';
+      osName?: 'Windows' | 'macOS' | 'Linux';
       supported: () => boolean;
       readSetting: () => Promise<WindowsNotificationSetting>;
       create: (title: string, body: string) => NativeToast;

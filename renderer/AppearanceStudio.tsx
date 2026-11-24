@@ -77,7 +77,15 @@ export function AppearanceStudio({
               [
                 ['light', 'Light', Sun],
                 ['dark', 'Dark', Moon],
-                ['system', window.screenwell.platform === 'darwin' ? 'macOS' : 'Windows', Monitor],
+                [
+                  'system',
+                  window.screenwell.platform === 'win32'
+                    ? 'Windows'
+                    : window.screenwell.platform === 'darwin'
+                      ? 'macOS'
+                      : 'System',
+                  Monitor,
+                ],
               ] as const
             ).map(([id, label, Icon]) => (
               <button

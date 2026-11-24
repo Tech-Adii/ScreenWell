@@ -135,7 +135,7 @@ export default function Privacy({ data }: { data: Snapshot }) {
             <p className="muted small-print">
               Export reports from Your progress. Delete your profile, history, calibration, and
               feedback from Profile → Delete all my data. Exported files remain wherever you saved
-              them. Closing ScreenWell to the tray stops the camera.
+              them. Closing ScreenWell stops the camera.
             </p>
             <div className="privacy-checks">
               <span>

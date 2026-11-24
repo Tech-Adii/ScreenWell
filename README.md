@@ -8,6 +8,8 @@ ScreenWell runs offline after installation. It has no account, backend, telemetr
 
 **MacBook:** macOS support is prepared in source, with Apple Silicon and Intel targets. No runnable Mac package has been built on this Windows host. Use [MAC-README.md](MAC-README.md) and `Build-on-Mac.command` on a Mac, or the manual macOS GitHub Actions workflow.
 
+**Linux (Intel and AMD 64-bit):** Use the `.deb` on Ubuntu or Debian, or try the AppImage on another compatible Linux desktop. See [Linux installation and build instructions](LINUX-README.md).
+
 Download [ScreenWell 1.14.0 Setup](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) for Windows x64. Local builds put the same versioned installer in `release/`. If you are updating, first choose **Quit ScreenWell** from the icon near the clock. Setup installs for the current Windows user and creates desktop and Start menu shortcuts. Your settings and study history stay in your Windows profile.
 
 This installer is unsigned. Windows Smart App Control may block it on protected PCs. The [validation record](VALIDATION.md) lists what was tested for this release.
