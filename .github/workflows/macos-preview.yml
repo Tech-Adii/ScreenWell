@@ -1,6 +1,11 @@
 name: Build Mac previews
 on:
   workflow_dispatch:
+    inputs:
+      publish_preview:
+        description: Publish both verified DMGs as a GitHub prerelease
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -29,13 +34,68 @@ jobs:
       - name: Build local preview packages
         run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --config.mac.identity=- --publish never
       - run: node scripts/verify-mac.mjs ${{ matrix.arch }}
-      - run: node scripts/mac-smoke.mjs ${{ matrix.arch }}
+      - name: Launch the app from the disk image
+        env:
+          SCREENWELL_MAC_ARCH: ${{ matrix.arch }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          image="release/ScreenWell-${version}-mac-${SCREENWELL_MAC_ARCH}.dmg"
+          mount_dir="$(mktemp -d "${RUNNER_TEMP}/screenwell-dmg.XXXXXX")"
+          hdiutil attach -readonly -nobrowse -mountpoint "$mount_dir" "$image"
+          trap 'hdiutil detach "$mount_dir"' EXIT
+          app="$mount_dir/ScreenWell.app"
+          staged=release/mac
+          if [[ "$SCREENWELL_MAC_ARCH" == arm64 ]]; then staged=release/mac-arm64; fi
+          codesign --verify --deep --strict "$app"
+          cmp "$app/Contents/Resources/app.asar" "$staged/ScreenWell.app/Contents/Resources/app.asar"
+          node scripts/mac-smoke.mjs "$SCREENWELL_MAC_ARCH" "$app"
       - uses: actions/upload-artifact@v4
         with:
           name: ScreenWell-mac-${{ matrix.arch }}-preview
           if-no-files-found: error
+          compression-level: 0
           path: |
             release/ScreenWell-*-mac-${{ matrix.arch }}.dmg
             release/ScreenWell-*-mac-${{ matrix.arch }}.zip
             release/MAC-VALIDATION-${{ matrix.arch }}.json
             release/mac-smoke-${{ matrix.arch }}.png
+  publish:
+    if: inputs.publish_preview
+    needs: mac
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ScreenWell-mac-*-preview
+          path: release/mac-preview
+          merge-multiple: true
+      - name: Verify and publish both disk images
+        working-directory: release/mac-preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SCREENWELL_SOURCE: ${{ github.sha }}
+        run: |
+          version="$(jq -er .version ../../package.json)"
+          for arch in arm64 x64; do
+            image="ScreenWell-${version}-mac-${arch}.dmg"
+            jq -er --arg arch "$arch" --arg version "$version" --arg image "$image" '
+              select(.arch == $arch and .version == $version and .signatureVerified and .nativeUiVerified and .diskImageLaunchVerified)
+              | .artifacts[] | select(.name == $image) | "\(.sha256)  \(.name)"
+            ' "MAC-VALIDATION-${arch}.json"
+          done > MAC-SHA256SUMS.txt
+          test "$(wc -l < MAC-SHA256SUMS.txt)" -eq 2
+          sha256sum --check MAC-SHA256SUMS.txt
+          gh release create "v${version}-mac" "ScreenWell-${version}-mac-arm64.dmg" "ScreenWell-${version}-mac-x64.dmg" MAC-SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$SCREENWELL_SOURCE" --prerelease \
+            --title "ScreenWell ${version} for macOS" --notes-file - << 'NOTES'
+          Download the **arm64** DMG for an Apple Silicon Mac (M-series), or the **x64** DMG for an Intel Mac. Open the disk image and drag ScreenWell to Applications.
+
+          These are ad-hoc signed previews. Apple has not notarized them, so Gatekeeper may block the download on some Macs, including managed devices.
+
+          Both disk images were checked on macOS 15 and the app launched on each target architecture. The launch test covered an offline study session and confirmed that the camera starts off. Physical webcam and spoken audio playback remain hands-on checks.
+
+          [Mac installation guide](https://github.com/Tech-Adii/ScreenWell/blob/main/MAC-README.md)
+          NOTES
