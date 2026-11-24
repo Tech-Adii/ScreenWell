@@ -46,7 +46,7 @@ jobs:
             cp test-results/packaged-smoke.json release/LINUX-DEB-SMOKE.json
             node scripts/smoke.mjs "$SCREENWELL_APPIMAGE_TEST_ROOT/AppRun"
             cp test-results/packaged-smoke.json release/LINUX-APPIMAGE-SMOKE.json
-            npx playwright test tests/ui/background.spec.ts -g "selected study checks continue"
+            SCREENWELL_E2E_EXECUTABLE=/opt/ScreenWell/screenwell npx playwright test tests/ui/background.spec.ts -g "selected study checks continue"
           '
           sudo apt-get remove -y screenwell
           test ! -e /opt/ScreenWell/screenwell

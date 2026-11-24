@@ -13,9 +13,10 @@ async function launch() {
     store = new Store(path.join(dir, 'screenwell.sqlite'));
   store.set('settings', { ...defaults, onboarded: true, name: 'Sky', quietEnabled: false });
   store.close();
+  const packagedExecutable = process.env.SCREENWELL_E2E_EXECUTABLE;
   const app = await electron.launch({
-      executablePath: require('electron') as string,
-      args: ['.', '--test'],
+      executablePath: packagedExecutable ?? (require('electron') as string),
+      args: packagedExecutable ? ['--test'] : ['.', '--test'],
       env: { ...process.env, SCREENWELL_DATA_DIR: dir },
     }),
     page = await app.firstWindow();
