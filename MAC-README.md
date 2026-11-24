@@ -3,12 +3,12 @@
 ## Install the preview
 
 1. Open **Apple menu → About This Mac** and check **Chip** or **Processor**.
-2. Download the matching `.pkg`. [Apple Silicon installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-arm64.pkg) · [Intel installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-x64.pkg)
+2. Download the matching `.pkg`. [Apple Silicon installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac-r2/ScreenWell-1.14.0-mac-arm64.pkg) · [Intel installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac-r2/ScreenWell-1.14.0-mac-x64.pkg)
 3. Open the package and follow macOS Installer's prompts. Then open **ScreenWell** from **Applications**.
 
 GitHub requires access to this private repository. The installers contain ad-hoc signed apps and may be blocked on computers that require Apple notarization. [Apple Developer ID and notarization](https://developer.apple.com/developer-id/)
 
-If your Mac is already running ScreenWell, quit it before running the installer. The Mac release also has disk images with drag-to-Applications setup. [Mac release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac)
+If your Mac is already running ScreenWell, quit it before running the installer. The Mac release also has disk images with drag-to-Applications setup. [Mac release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac-r2)
 
 ## Build on a Mac
 
@@ -38,7 +38,7 @@ The menu bar includes normal Mac application/edit/window menus. The Dock reopens
 
 ## Before presenting to your teacher
 
-Both previews passed signature, architecture, package-content and offline launch checks on macOS 15. On your Mac, test any features you plan to demonstrate that use the physical webcam, spoken audio, or other Spaces and fullscreen apps. [macOS verification run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45425551930)
+Both corrected previews passed signature, architecture, package-content and offline launch checks on macOS 26. On your Mac, test any features you plan to demonstrate that use the physical webcam, spoken audio, or other Spaces and fullscreen apps. [macOS verification run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45431360600)
 
 For public or managed-device distribution, use an Apple Developer ID certificate and Apple notarization credentials with `npm run dist:mac`; signing and notarization must be verified on the resulting artifacts. Keep credentials in your build environment, never in this kit.
 

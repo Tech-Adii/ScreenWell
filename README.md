@@ -17,7 +17,7 @@
 [![Tests](https://img.shields.io/badge/Tests-Windows%20%7C%20Ubuntu-8b5cf6?style=flat-square)](VALIDATION.md)
 [![MediaPipe](https://img.shields.io/badge/AI-On--Device%20MediaPipe%20WASM-ff6f00?style=flat-square)](#-smart-on-device-vision-engine)
 
-[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux) • [Mac download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
+[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux) • [Mac download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac-r2) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
 
 </div>
 
@@ -203,7 +203,7 @@ Minimize ScreenWell to keep tracking and reminders running. On Linux, closing th
 
 ### macOS preview (Apple Silicon and Intel)
 
-Open **Apple menu → About This Mac** to check your chip. Download and open the matching `.pkg`, then follow the Installer prompts. ScreenWell appears in **Applications**. [Apple Silicon installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-arm64.pkg) · [Intel installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-x64.pkg)
+Open **Apple menu → About This Mac** to check your chip. Download and open the matching `.pkg`, then follow the Installer prompts. ScreenWell appears in **Applications**. [Apple Silicon installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac-r2/ScreenWell-1.14.0-mac-arm64.pkg) · [Intel installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac-r2/ScreenWell-1.14.0-mac-x64.pkg)
 
 Apple has yet to notarize these previews. macOS security settings may block them on some Macs, including managed devices. [Mac guide](MAC-README.md)
 ---
@@ -273,7 +273,7 @@ npm run dist:setup:signed
 
 - **Windows 11 x64** passed 118 unit tests, 22 desktop scenarios, and installer checks for offline launch, upgrade, and uninstall.
 - **Ubuntu 24.04 x64** passed 118 unit tests. The installed Debian package and extracted AppImage passed offline desktop checks. The Debian package also passed a minimized-camera test with synthetic video. [Linux workflow results](https://github.com/Tech-Adii/ScreenWell/actions/runs/45415738046)
-- **macOS 15** passed 118 unit tests on both Apple Silicon and Intel. Each app launched from its own disk image and ran a study session offline with the camera off. [macOS verification](https://github.com/Tech-Adii/ScreenWell/actions/runs/45425551930)
+- **macOS 26** passed 118 unit tests on Apple Silicon and Intel. Both corrected previews launched from their disk images and ran a study session offline with the camera off. [macOS verification](https://github.com/Tech-Adii/ScreenWell/actions/runs/45431360600)
 - **Test limits** include physical webcam accuracy, spoken audio on Mac, and differences between Linux desktops. [Validation record](VALIDATION.md)
 
 ---

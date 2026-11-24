@@ -1,5 +1,11 @@
 # Validation record
 
+## macOS 26 launch fix for 1.14.0
+
+- A crash report from an Apple Silicon Mac on macOS 26.6.2 showed that the system rejected Electron's framework because its signing Team ID differed from ScreenWell's. The ad-hoc preview now builds without Hardened Runtime. The standard Mac build retains its signing configuration.
+- The revised Apple Silicon and Intel disk images passed signature and architecture checks and ran an offline study session on macOS 26. [Disk image verification](https://github.com/Tech-Adii/ScreenWell/actions/runs/45431360600)
+- Both revised `.pkg` files installed into Applications on separate macOS 26 runners. The installed builds passed offline launch, study, hydration and PDF export checks. [Installer verification](https://github.com/Tech-Adii/ScreenWell/actions/runs/45432977440)
+
 ## macOS 1.14.0 preview
 
 - The Apple Silicon and Intel macOS 15 jobs passed the production build, the offline asset check, lint, and all 118 unit tests.
