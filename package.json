@@ -1,0 +1,105 @@
+{
+  "name": "screenwell",
+  "version": "1.14.0",
+  "description": "Private, offline study and screen wellness companion",
+  "author": "ScreenWell · CS238DL",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "dist/main/index.cjs",
+  "scripts": {
+    "assets": "node scripts/prepare-assets.mjs && node scripts/licenses.mjs",
+    "build": "tsc --noEmit && node scripts/build.mjs && node scripts/check-offline.mjs",
+    "start": "electron .",
+    "dev": "npm run build && electron .",
+    "test": "vitest run",
+    "test:ui": "npm run build && playwright test",
+    "lint": "eslint .",
+    "format": "prettier --write main renderer vision engine data shared tests scripts *.json *.md",
+    "dist": "npm run dist:setup && electron-builder --win portable --x64 --prepackaged release/win-unpacked",
+    "dist:setup": "npm run build && electron-builder --win --dir --x64 && node scripts/verify-package.mjs && node scripts/build-setup.mjs && node scripts/verify-setup.mjs",
+    "dist:setup:signed": "node scripts/build-setup.mjs --check-signing && npm run dist:dir && node scripts/verify-package.mjs && node scripts/build-setup.mjs --signed && node scripts/verify-setup.mjs --signed",
+    "dist:dir": "npm run build && electron-builder --win --dir --x64",
+    "dist:portable": "npm run build && electron-builder --win portable --x64",
+    "dist:mac": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --publish never",
+    "dist:mac:preview": "npm run build && electron-builder --mac dmg zip --arm64 --x64 --config.mac.identity=- --publish never"
+  },
+  "dependencies": {
+    "@fontsource/nunito-sans": "^5.3.0",
+    "@mediapipe/tasks-vision": "1.2.0",
+    "@pdf-lib/fontkit": "^1.1.1",
+    "lucide-react": "^0.577.0",
+    "pdf-lib": "^1.17.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "recharts": "^3.8.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^24.12.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.0",
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0",
+    "esbuild": "^0.27.4",
+    "eslint": "^9.39.4",
+    "globals": "^17.4.0",
+    "png-to-ico": "^3.0.1",
+    "prettier": "^3.8.3",
+    "sharp": "^0.34.5",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "vite": "8.3.5",
+    "vitest": "^4.1.0"
+  },
+  "build": {
+    "appId": "in.screenwell.desktop",
+    "productName": "ScreenWell",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "!node_modules/**/*"
+    ],
+    "asar": true,
+    "npmRebuild": false,
+    "mac": {
+      "category": "public.app-category.healthcare-fitness",
+      "icon": "assets/icon.icns",
+      "artifactName": "ScreenWell-${version}-mac-${arch}.${ext}",
+      "hardenedRuntime": true,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "ScreenWell uses the camera only for the blink, posture and distance checks you choose. Images are processed on this Mac and are not recorded or uploaded."
+      }
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "signExecutable": false
+    },
+    "nsis": {
+      "artifactName": "ScreenWell-${version}-Setup.exe",
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "portable": {
+      "artifactName": "ScreenWell-${version}-Portable.exe"
+    }
+  }
+}

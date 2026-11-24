@@ -1,0 +1,41 @@
+name: Build Mac previews
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mac:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run assets
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - name: Build local preview packages
+        run: npx electron-builder --mac dmg zip --${{ matrix.arch }} --config.mac.identity=- --publish never
+      - run: node scripts/verify-mac.mjs ${{ matrix.arch }}
+      - run: node scripts/mac-smoke.mjs ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScreenWell-mac-${{ matrix.arch }}-preview
+          if-no-files-found: error
+          path: |
+            release/ScreenWell-*-mac-${{ matrix.arch }}.dmg
+            release/ScreenWell-*-mac-${{ matrix.arch }}.zip
+            release/MAC-VALIDATION-${{ matrix.arch }}.json
+            release/mac-smoke-${{ matrix.arch }}.png
