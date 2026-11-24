@@ -186,7 +186,7 @@ ScreenWell/
 ## 🚀 Quick Start & Installation
 
 ### Windows x64
-1. Download `ScreenWell-1.14.0-Setup.exe`. [Windows release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0)
+1. Download and open `ScreenWell-1.14.0-Setup.exe`. [Download Windows Setup](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0/ScreenWell-1.14.0-Setup.exe)
 2. Run the installer. It installs locally for your Windows user profile without requiring administrator privileges.
 3. Launch ScreenWell from your desktop shortcut or Start menu. If upgrading, quit the older copy from its tray menu before starting Setup.
 
@@ -196,14 +196,14 @@ The setup is unsigned. Windows Smart App Control can block it on protected PCs. 
 
 Pick the `.deb` for Ubuntu or Debian, or the AppImage for another compatible desktop. The Linux preview targets 64-bit Intel and AMD processors and was tested on Ubuntu 24.04. [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux)
 
-- **Ubuntu or Debian**. Open a terminal in the download folder and run `sudo apt install ./ScreenWell-1.14.0-linux-amd64.deb`. Open **ScreenWell** from the applications menu.
+- **Ubuntu or Debian**. Download the `.deb`, open it in your desktop's software installer, and click **Install**. Open **ScreenWell** from the applications menu. [Download the .deb](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-linux/ScreenWell-1.14.0-linux-amd64.deb)
 - **AppImage**. In the file's properties, allow it to run as a program, then open it. [Linux install guide](LINUX-README.md)
 
 Minimize ScreenWell to keep tracking and reminders running. On Linux, closing the window quits the app and saves your active study session for later. Tray and popup behavior varies by desktop.
 
 ### macOS preview (Apple Silicon and Intel)
 
-Open **Apple menu → About This Mac** to check your chip. Pick the `arm64.dmg` for an Apple M-series Mac or the `x64.dmg` for an Intel Mac. Open the disk image and drag **ScreenWell** to **Applications**. [macOS release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac)
+Open **Apple menu → About This Mac** to check your chip. Download and open the matching `.pkg`, then follow the Installer prompts. ScreenWell appears in **Applications**. [Apple Silicon installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-arm64.pkg) · [Intel installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-x64.pkg)
 
 Apple has yet to notarize these previews. macOS security settings may block them on some Macs, including managed devices. [Mac guide](MAC-README.md)
 ---

@@ -6,7 +6,7 @@ ScreenWell uses the same study sessions, reminders, themes, and optional on-devi
 
 Download the preview and its SHA-256 checksums from the [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux). GitHub requires access to this private repository.
 
-- **Ubuntu or Debian.** In the terminal, open the folder containing the setup and run `sudo apt install ./ScreenWell-1.14.0-linux-amd64.deb`. Then open **ScreenWell** from the applications menu.
+- **Ubuntu or Debian.** Open the `.deb` with your desktop's software installer and click **Install**. If your desktop doesn't have a graphical package installer, run `sudo apt install ./ScreenWell-1.14.0-linux-amd64.deb` in the download folder. Then open **ScreenWell** from the applications menu. [Download the .deb](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-linux/ScreenWell-1.14.0-linux-amd64.deb)
 - **AppImage.** In the file's properties, allow it to run as a program, then open it. You can also run `chmod +x ScreenWell-1.14.0-linux-x64.AppImage` followed by `./ScreenWell-1.14.0-linux-x64.AppImage`. If Ubuntu reports a FUSE or sandbox issue, use the `.deb` on that system.
 
 Minimize the app to keep study sessions and selected camera checks running. The window title shows the countdown. Tray icons, tooltips, notification placement, and which windows sit on top depend on your desktop environment. Closing the window quits ScreenWell and saves the current study session for later. The numbered Windows taskbar badge is specific to Windows.

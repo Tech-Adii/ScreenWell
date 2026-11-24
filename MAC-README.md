@@ -3,10 +3,12 @@
 ## Install the preview
 
 1. Open **Apple menu → About This Mac** and check **Chip** or **Processor**.
-2. Pick `ScreenWell-1.14.0-mac-arm64.dmg` for an Apple M-series chip or `ScreenWell-1.14.0-mac-x64.dmg` for an Intel processor. [Mac release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac)
-3. Open the `.dmg` and drag **ScreenWell** to **Applications**. Then open it from **Applications**.
+2. Download the matching `.pkg`. [Apple Silicon installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-arm64.pkg) · [Intel installer](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-mac/ScreenWell-1.14.0-mac-x64.pkg)
+3. Open the package and follow macOS Installer's prompts. Then open **ScreenWell** from **Applications**.
 
-GitHub requires access to this private repository. The builds use ad-hoc signatures and may be blocked on computers that require Apple notarization. [Apple Developer ID and notarization](https://developer.apple.com/developer-id/)
+GitHub requires access to this private repository. The installers contain ad-hoc signed apps and may be blocked on computers that require Apple notarization. [Apple Developer ID and notarization](https://developer.apple.com/developer-id/)
+
+If your Mac is already running ScreenWell, quit it before running the installer. The Mac release also has disk images with drag-to-Applications setup. [Mac release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac)
 
 ## Build on a Mac
 
@@ -25,6 +27,8 @@ Open the matching DMG and copy ScreenWell to Applications. These are **ad-hoc si
 ## Build without owning a Mac
 
 In the ScreenWell repository, open **Actions → Build Mac previews → Run workflow**. Successful jobs provide separate Apple Silicon and Intel artifacts. If you select **publish_preview**, GitHub verifies both disk images and publishes them as a prerelease. GitHub plan usage limits may apply.
+
+Run **Build Mac installers** after publishing a version's disk images to build and verify the matching `.pkg` files and add them to that release.
 
 ## Mac-specific behavior
 
