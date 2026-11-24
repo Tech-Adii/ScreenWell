@@ -1,0 +1,91 @@
+name: Build Mac installers
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  installers:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    env:
+      SCREENWELL_MAC_ARCH: ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Verify the existing Mac release image
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          image="ScreenWell-${version}-mac-${SCREENWELL_MAC_ARCH}.dmg"
+          mkdir -p release/mac-installers
+          cd release/mac-installers
+          gh release download "v${version}-mac" --pattern "$image" --pattern 'MAC-SHA256SUMS.txt'
+          grep -F "  $image" MAC-SHA256SUMS.txt > image.sha256
+          shasum -a 256 --check image.sha256
+      - name: Build, install, and test the Mac package
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          base="release/mac-installers/ScreenWell-${version}-mac-${SCREENWELL_MAC_ARCH}"
+          bash scripts/build-mac-installer.sh "$base.dmg" "$base.pkg" "$SCREENWELL_MAC_ARCH" "$version"
+          test ! -e /Applications/ScreenWell.app
+          sudo /usr/sbin/installer -pkg "$base.pkg" -target /
+          codesign --verify --deep --strict /Applications/ScreenWell.app
+          installed_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' /Applications/ScreenWell.app/Contents/Info.plist)"
+          test "$installed_version" = "$version"
+          node scripts/smoke.mjs /Applications/ScreenWell.app/Contents/MacOS/ScreenWell
+          (
+            cd release/mac-installers
+            shasum -a 256 "ScreenWell-${version}-mac-${SCREENWELL_MAC_ARCH}.pkg" > "MAC-PKG-${SCREENWELL_MAC_ARCH}.sha256"
+          )
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScreenWell-mac-installer-${{ matrix.arch }}
+          if-no-files-found: error
+          compression-level: 0
+          path: |
+            release/mac-installers/*.pkg
+            release/mac-installers/MAC-PKG-*.sha256
+            test-results/packaged-smoke.json
+  publish:
+    needs: installers
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ScreenWell-mac-installer-*
+          path: release/installers
+      - name: Attach the verified installers to the Mac preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -er .version package.json)"
+          for arch in arm64 x64; do
+            (
+              cd "release/installers/ScreenWell-mac-installer-${arch}"
+              jq -e '(.offlineReload and .studySession and .cameraOff and .waterLogged and .pdfExport)' test-results/packaged-smoke.json
+              cd release/mac-installers
+              sha256sum --check "MAC-PKG-${arch}.sha256"
+            )
+          done
+          cd release/installers
+          cat ScreenWell-mac-installer-*/release/mac-installers/MAC-PKG-*.sha256 > MAC-INSTALLER-SHA256SUMS.txt
+          gh release upload "v${version}-mac" ScreenWell-mac-installer-*/release/mac-installers/ScreenWell-*-mac-*.pkg MAC-INSTALLER-SHA256SUMS.txt
