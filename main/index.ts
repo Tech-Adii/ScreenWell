@@ -459,7 +459,10 @@ async function boot() {
     if (!quitting && !testing) {
       e.preventDefault();
       if (process.platform === 'linux') {
-        app.quit();
+        // Finish the window's close event before asking Electron to close all windows.
+        setImmediate(() => {
+          if (!quitting) app.quit();
+        });
         return;
       }
       win.hide();
@@ -531,10 +534,7 @@ async function boot() {
       { type: 'separator' },
       {
         label: 'Quit ScreenWell',
-        click: () => {
-          quitting = true;
-          app.quit();
-        },
+        click: () => app.quit(),
       },
     ]),
   );
@@ -1280,21 +1280,23 @@ app.on('second-instance', () => {
     win.show();
   }
 });
-app.on('before-quit', () => {
+app.once('before-quit', () => {
   quitting = true;
   desktopDelivery.clear();
   cameraOn = false;
   clearInterval(timer);
-  if (store) {
+  if (store && state) {
     recordAway(cameraTracking.interrupt());
     if (hasStudy(state.study)) state.study = actStudy(state.study, { type: 'pause' }, Date.now());
     persist();
-    store.close();
-    if (state.demo) realStore.close();
   }
 });
+app.once('quit', () => {
+  store?.close();
+  if (realStore !== store) realStore?.close();
+});
 app.on('window-all-closed', () => {
-  if (testing || process.platform === 'linux') app.quit();
+  if (!quitting && (testing || process.platform === 'linux')) app.quit();
 });
 if (gotLock)
   app

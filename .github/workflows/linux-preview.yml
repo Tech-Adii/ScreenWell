@@ -6,6 +6,11 @@ on:
     paths-ignore:
       - '**/*.md'
   workflow_dispatch:
+    inputs:
+      publish_preview:
+        description: Publish the verified Linux packages to GitHub Releases
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -70,4 +75,33 @@ jobs:
           xvfb-run -a -s '-screen 0 1440x1000x24' dbus-run-session -- bash -e -c '
             openbox > /tmp/screenwell-openbox.log 2>&1 &
             npx playwright test tests/ui/background.spec.ts -g "selected study checks continue"
+            npx playwright test tests/ui/shutdown.spec.ts
           '
+  publish:
+    if: inputs.publish_preview
+    needs: linux
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ScreenWell-linux-x64
+          path: release/linux
+      - name: Publish the verified Linux update
+        working-directory: release/linux
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SCREENWELL_SOURCE: ${{ github.sha }}
+        run: |
+          version="$(jq -er .version ../../package.json)"
+          sha256sum --check LINUX-SHA256SUMS.txt
+          gh release create "v${version}-linux" "ScreenWell-${version}-linux-amd64.deb" "ScreenWell-${version}-linux-x64.AppImage" LINUX-SHA256SUMS.txt \
+            --target "$SCREENWELL_SOURCE" --prerelease --title "ScreenWell ${version} for Linux x64" --notes-file - << 'NOTES'
+          Fixes the Linux shutdown error “database is not open.” ScreenWell now saves the session once and closes its database after shutdown finishes.
+
+          Download the .deb for Ubuntu or Debian, or the AppImage for a compatible Linux desktop. Install the .deb over the previous version to keep your ScreenWell profile and history.
+
+          The Ubuntu check closes the installed app during a study session, exercises overlapping quit events, and verifies that the saved session and water log are intact.
+          NOTES
