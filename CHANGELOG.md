@@ -1,5 +1,9 @@
 # ScreenWell changelog
 
+## 1.14.1 — Linux shutdown fix
+
+- Closing ScreenWell on Linux saves the session once and closes the database after the windows finish closing. This fixes the “database is not open” dialog caused by overlapping quit events.
+
 ## 1.14.0 — Windows taskbar countdown and release fixes
 
 - Minimize a session to see its remaining minutes on the taskbar. Hover over the tray icon for the exact countdown. Pausing a session freezes its timer.

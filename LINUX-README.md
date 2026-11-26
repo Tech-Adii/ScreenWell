@@ -4,10 +4,10 @@ ScreenWell uses the same study sessions, reminders, themes, and optional on-devi
 
 ## Run on Linux x64
 
-Download the preview and its SHA-256 checksums from the [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux). GitHub requires access to this private repository.
+Download the preview and its SHA-256 checksums from the [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.1-linux). GitHub requires access to this private repository.
 
-- **Ubuntu or Debian.** Open the `.deb` with your desktop's software installer and click **Install**. If your desktop doesn't have a graphical package installer, run `sudo apt install ./ScreenWell-1.14.0-linux-amd64.deb` in the download folder. Then open **ScreenWell** from the applications menu. [Download the .deb](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-linux/ScreenWell-1.14.0-linux-amd64.deb)
-- **AppImage.** In the file's properties, allow it to run as a program, then open it. You can also run `chmod +x ScreenWell-1.14.0-linux-x64.AppImage` followed by `./ScreenWell-1.14.0-linux-x64.AppImage`. If Ubuntu reports a FUSE or sandbox issue, use the `.deb` on that system.
+- **Ubuntu or Debian.** Open the `.deb` with your desktop's software installer and click **Install**. If your desktop doesn't have a graphical package installer, run `sudo apt install ./ScreenWell-1.14.1-linux-amd64.deb` in the download folder. Then open **ScreenWell** from the applications menu. [Download the .deb](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.1-linux/ScreenWell-1.14.1-linux-amd64.deb)
+- **AppImage.** In the file's properties, allow it to run as a program, then open it. You can also run `chmod +x ScreenWell-1.14.1-linux-x64.AppImage` followed by `./ScreenWell-1.14.1-linux-x64.AppImage`. If Ubuntu reports a FUSE or sandbox issue, use the `.deb` on that system.
 
 Minimize the app to keep study sessions and selected camera checks running. The window title shows the countdown. Tray icons, tooltips, notification placement, and which windows sit on top depend on your desktop environment. Closing the window quits ScreenWell and saves the current study session for later. The numbered Windows taskbar badge is specific to Windows.
 
@@ -27,4 +27,4 @@ npm run dist:linux
 
 The packages go in `release/`. The GitHub workflow **Build and test Linux packages** runs on changes to `main` that include files other than Markdown. You can also run it manually from **Actions**. A successful run provides an artifact named `ScreenWell-linux-x64` with packages, checksums, and verification reports.
 
-The release packages were checked on Ubuntu 24.04. The checks ran the installed `.deb` and the extracted AppImage, and used synthetic video for the minimized-camera test. Physical webcams and other Linux desktops still need hands-on testing. [Ubuntu verification run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45415738046)
+The release packages were checked on Ubuntu 24.04. The checks ran the installed `.deb` and the extracted AppImage, and used synthetic video for the minimized-camera test. The installed app closed cleanly with overlapping quit events and preserved the study session and water log. Physical webcams and other Linux desktops still need hands-on testing. [Ubuntu verification run](https://github.com/Tech-Adii/ScreenWell/actions/runs/45754607039)

@@ -17,7 +17,7 @@
 [![Tests](https://img.shields.io/badge/Tests-Windows%20%7C%20Ubuntu-8b5cf6?style=flat-square)](VALIDATION.md)
 [![MediaPipe](https://img.shields.io/badge/AI-On--Device%20MediaPipe%20WASM-ff6f00?style=flat-square)](#-smart-on-device-vision-engine)
 
-[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux) • [Mac download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac-r2) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
+[Windows download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0) • [Linux download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.1-linux) • [Mac download](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-mac-r2) • [Key features](#-core-capabilities) • [Architecture](#-radical-privacy--offline-first-architecture) • [Quick start](#-quick-start--installation)
 
 </div>
 
@@ -194,9 +194,9 @@ The setup is unsigned. Windows Smart App Control can block it on protected PCs. 
 
 ### Linux x64 preview
 
-Pick the `.deb` for Ubuntu or Debian, or the AppImage for another compatible desktop. The Linux preview targets 64-bit Intel and AMD processors and was tested on Ubuntu 24.04. [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.0-linux)
+Pick the `.deb` for Ubuntu or Debian, or the AppImage for another compatible desktop. The Linux preview targets 64-bit Intel and AMD processors and was tested on Ubuntu 24.04. [Linux release](https://github.com/Tech-Adii/ScreenWell/releases/tag/v1.14.1-linux)
 
-- **Ubuntu or Debian**. Download the `.deb`, open it in your desktop's software installer, and click **Install**. Open **ScreenWell** from the applications menu. [Download the .deb](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.0-linux/ScreenWell-1.14.0-linux-amd64.deb)
+- **Ubuntu or Debian**. Download the `.deb`, open it in your desktop's software installer, and click **Install**. Open **ScreenWell** from the applications menu. [Download the .deb](https://github.com/Tech-Adii/ScreenWell/releases/download/v1.14.1-linux/ScreenWell-1.14.1-linux-amd64.deb)
 - **AppImage**. In the file's properties, allow it to run as a program, then open it. [Linux install guide](LINUX-README.md)
 
 Minimize ScreenWell to keep tracking and reminders running. On Linux, closing the window quits the app and saves your active study session for later. Tray and popup behavior varies by desktop.

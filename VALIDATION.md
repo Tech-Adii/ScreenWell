@@ -1,5 +1,11 @@
 # Validation record
 
+## Linux 1.14.1 shutdown fix — 26 November 2026
+
+- The stack trace from 1.14.0 matched a second quit request from the all-windows-closed callback. The earlier shutdown had already closed the database.
+- The rebuilt Debian package and extracted AppImage passed offline launch checks on Ubuntu 24.04. In the installed app, closing the window during a study session with overlapping quit events exited cleanly. Reopening the database confirmed that the paused session and water log were saved.
+- All 118 unit tests passed. Three Windows desktop checks also passed against the updated source, covering onboarding, taskbar timing, and study recovery. [Linux build and release checks](https://github.com/Tech-Adii/ScreenWell/actions/runs/45754607039)
+
 ## macOS 26 launch fix for 1.14.0
 
 - A crash report from an Apple Silicon Mac on macOS 26.6.2 showed that the system rejected Electron's framework because its signing Team ID differed from ScreenWell's. The ad-hoc preview now builds without Hardened Runtime. The standard Mac build retains its signing configuration.
